@@ -33,6 +33,7 @@ ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=Csv())
 
 # --- Applications installées ---
 INSTALLED_APPS = [
+    'comptes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,9 +45,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
 
-    # Nos applications métier viendront ici au fur et à mesure (PHASE 1 et suivantes)
-    # 'apps.comptes',
-    # 'apps.randonnees',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +137,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+# --- Modèle utilisateur personnalisé ---
+AUTH_USER_MODEL = 'comptes.Utilisateur'
