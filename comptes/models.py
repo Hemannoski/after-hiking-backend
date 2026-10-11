@@ -133,4 +133,4 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         ordering = ["-date_creation"]
 
     def __str__(self):
-        return self.email
+        return self.nom_utilisateur

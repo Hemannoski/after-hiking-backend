@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # Bibliothèques tierces
     'rest_framework',
     'drf_spectacular',
-
+    'medias',
+    'randonnees',
 ]
 
 MIDDLEWARE = [

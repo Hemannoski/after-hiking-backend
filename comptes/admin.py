@@ -43,8 +43,7 @@ class UtilisateurAdmin(BaseUserAdmin):
         "firebase_uid",
     ]
     
-    # Pagination (nombre d'utilisateurs par page)
-    list_per_page = 25
+    
     
     # Tri par défaut (du plus récent au plus ancien)
     ordering = ["-date_creation"]
