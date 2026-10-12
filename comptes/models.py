@@ -134,3 +134,56 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.nom_utilisateur
+
+
+
+
+
+class TypeAppareil(models.TextChoices):
+    ANDROID = 'android', 'Android'
+    IOS = 'ios', 'Ios (Apple)'
+
+
+
+class Appareil(models.Model):
+    """Ce modèle gère les notifications que Firebase envoie aux utilisateurs sur leurs téléphones"""
+
+    type_appareil = models.CharField(
+        max_length=20, 
+        choices=TypeAppareil.choices, 
+        help_text="Le systeme d'exploitation du téléphone "
+    )
+
+
+    utilisateur = models.ForeignKey(
+        'comptes.Utilisateur',
+        on_delete=models.CASCADE,
+        related_name='mes_appareils',
+        help_text="Le propriétaire du téléphone"
+    )
+
+
+    jeton_notification_appareil = models.TextField(
+        help_text="Le jeton de notification envoyé par firebase"
+    )
+
+    date_connexion = models.DateTimeField(
+        auto_now_add=True,
+        help_text="La date et l'heure de la prémière connexion de l'utilisateur"
+    )
+
+    date_derniere_connexion = models.DateTimeField(
+        auto_now=True,
+        help_text="La dernière date de connexion"
+    )
+
+
+    class Meta:
+        db_table = "appareils"
+        verbose_name = "Appareil"
+        verbose_name_plural = "Appareils"
+        ordering = ["-date_connexion"]
+
+    def __str__(self) -> str:
+        return f"{self.type_appareil} - {self.utilisateur.email}"
+    

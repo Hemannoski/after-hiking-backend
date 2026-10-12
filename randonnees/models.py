@@ -98,3 +98,63 @@ class Randonnee(models.Model):
     def __str__(self):
         return self.titre_randonnee
 
+
+
+
+
+class StatistiqueRandonnee(models.Model):
+    """Ce modèle gère les statistiques d'une randonnée (utilisées par l'IA)."""
+
+    randonnee = models.OneToOneField(
+        'Randonnee',
+        on_delete=models.CASCADE,
+        related_name='statistiques',
+        help_text="La randonnée associée à ces statistiques"
+    )
+
+    # --- Les compteurs d'interaction ---
+    nombre_vues = models.IntegerField(
+        default=0,
+        help_text="Le nombre de fois que la randonnée a été vue"
+    )
+
+    nombre_likes = models.IntegerField(
+        default=0,
+        help_text="Le nombre de likes sur la randonnée"
+    )
+
+    nombre_commentaires = models.IntegerField(
+        default=0,
+        help_text="Le nombre de commentaires sur la randonnée"
+    )
+
+    # --- Les métriques d'audience (Crucial pour l'IA) ---
+    abonnes_auteur_a_la_publication = models.IntegerField(
+        default=0,
+        help_text="Nombre d'abonnés de l'auteur au moment précis de la publication (Baseline)"
+    )
+
+    nb_abonnes_gagnes = models.IntegerField(
+        default=0,
+        help_text="Nombre de nouveaux abonnés gagnés directement via cette randonnée"
+    )
+
+    # --- Les dates ---
+    date_creation_statistique = models.DateTimeField(
+        auto_now_add=True,
+        help_text="Date de création de la fiche statistique"
+    )
+
+    date_derniere_mise_a_jour = models.DateTimeField(
+        auto_now=True,
+        help_text="Date de la dernière mise à jour des compteurs"
+    )
+
+    class Meta:
+        db_table = "statistiques_randonnees"
+        verbose_name = "Statistique Randonnée"
+        verbose_name_plural = "Statistiques Randonnées"
+        ordering = ["-date_derniere_mise_a_jour"]
+
+    def __str__(self) -> str:
+        return f"Stats pour : {self.randonnee.titre_randonnee} ({self.nombre_vues} vues)"

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Randonnee
+from .models import Randonnee, StatistiqueRandonnee
 
 @admin.register(Randonnee)
 class RandonneeAdmin(admin.ModelAdmin):
@@ -111,3 +111,51 @@ class RandonneeAdmin(admin.ModelAdmin):
     )
 
 
+
+
+@admin.register(StatistiqueRandonnee)
+class StatistiqueRandonneeAdmin(admin.ModelAdmin):
+    """Configuration de l'interface d'administration pour le modèle Statistique Randonnee."""
+
+    # --- 1. AFFICHAGE DE LA LISTE DES STATISTIQUE RANDONNEE ---
+        
+    # Colonnes affichées dans la liste
+    list_display = [
+        "randonnee",
+        "nombre_vues",
+        "nombre_likes",
+        "nombre_commentaires",
+        "abonnes_auteur_a_la_publication",
+        "nb_abonnes_gagnes",
+        "date_creation_statistique",
+        "date_derniere_mise_a_jour"
+    ]
+
+    # Filtres latéraux (à droite de la liste)
+    list_filter = [
+        "date_derniere_mise_a_jour",
+        "date_creation_statistique",
+    ]
+
+    # Barre de recherche en haut
+    search_fields = [
+        "randonnee__titre_randonnee",
+    ]
+
+    # Tri par défaut (du plus récent au plus ancien)
+    ordering = ["-date_creation_statistique"]
+
+    # Champs affichés en lecture seule (non modifiables)
+    readonly_fields = [
+        "randonnee",
+        "nombre_vues",
+        "nombre_likes",
+        "nombre_commentaires",
+        "abonnes_auteur_a_la_publication",
+        "nb_abonnes_gagnes",
+        "date_creation_statistique",
+        "date_derniere_mise_a_jour"
+    ]
+
+    # Pagination (nombre de randonnee par page)
+    list_per_page = 25

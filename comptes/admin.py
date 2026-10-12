@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Utilisateur
+from .models import Utilisateur, Appareil
 
 
 @admin.register(Utilisateur)
@@ -123,3 +123,50 @@ class UtilisateurAdmin(BaseUserAdmin):
             },
         ),
     )
+
+
+
+@admin.register(Appareil)
+class AppareilAdmin(admin.ModelAdmin):
+    """
+        Configuration de l'interface d'administration pour le modèle Appareil.
+    """
+
+    # Cette méthode va tronquer la chaine du jeton de notification pour garder 20 caractère pour mieux l'afficher dans l'espace admin
+    def jeton_notification_court(self, obj):
+        return obj.jeton_notification_appareil[:21] + "..." if len(obj.jeton_notification_appareil) > 20 else obj.jeton_notification_appareil
+
+        # --- 1. AFFICHAGE DE LA LISTE DES APPAREIL ---
+    
+    # Colonnes affichées dans la liste
+    list_display = [
+        "type_appareil",
+        "utilisateur",
+        "jeton_notification_court",
+        "date_connexion",
+        "date_derniere_connexion"
+    ]
+
+
+    # Filtres latéraux (à droite de la liste)
+    list_filter = [
+        "type_appareil"
+    ]
+
+    # Barre de recherche en haut
+    search_fields = [
+        "utilisateur__email"
+    ]
+
+    # Champs affichés en lecture seule (non modifiables)
+    readonly_fields = [
+        "jeton_notification_appareil",
+        "date_connexion",
+        "date_derniere_connexion"
+    ]
+
+    # Tri par défaut (du plus récent au plus ancien)
+    ordering = ["-date_derniere_connexion"]
+
+    # Pagination (nombre de randonnee par page)
+    list_per_page = 25
