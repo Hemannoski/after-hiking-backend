@@ -10,6 +10,7 @@ class RandonneeAdmin(admin.ModelAdmin):
         if obj.media_couverture:
             return f"{obj.media_couverture.type_media} - {obj.media_couverture.lien_photo[:30]}..."
         return "Aucune"
+    apercu_couverture.short_description = "Aperçu du média de couverture"
 
 
 

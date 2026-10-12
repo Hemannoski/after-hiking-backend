@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'medias',
     'randonnees',
+    'social',
 ]
 
 MIDDLEWARE = [
