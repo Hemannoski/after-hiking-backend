@@ -117,6 +117,11 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         help_text="Indique si l'utilisateur peut accéder à l'admin Django."
     )
 
+    compte_prive = models.BooleanField(
+        default=False,
+        help_text="Compte prive ou publique permmettant aux abonnés non bloqué de voir les randonnees publiées"
+    )
+
     # --- Liaison avec le Manager personnalisé ---
     objects = UtilisateurManager()
 

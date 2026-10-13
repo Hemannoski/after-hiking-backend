@@ -127,6 +127,8 @@ class StatistiqueRandonneeAdmin(admin.ModelAdmin):
         "nombre_commentaires",
         "abonnes_auteur_a_la_publication",
         "nb_abonnes_gagnes",
+        "nombre_medias",
+        "longueur_description_randonnee",
         "date_creation_statistique",
         "date_derniere_mise_a_jour"
     ]
@@ -154,7 +156,9 @@ class StatistiqueRandonneeAdmin(admin.ModelAdmin):
         "abonnes_auteur_a_la_publication",
         "nb_abonnes_gagnes",
         "date_creation_statistique",
-        "date_derniere_mise_a_jour"
+        "date_derniere_mise_a_jour",
+        "nombre_medias",
+        "longueur_description_randonnee",
     ]
 
     # Pagination (nombre de randonnee par page)

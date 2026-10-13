@@ -22,6 +22,7 @@ class UtilisateurAdmin(BaseUserAdmin):
         "is_active",
         "is_staff",
         "date_creation",
+        "compte_prive"
     ]
     
     # Colonnes cliquables pour trier
@@ -69,6 +70,7 @@ class UtilisateurAdmin(BaseUserAdmin):
                     "nom_utilisateur",
                     "password1",  # Champ mot de passe (géré par Django)
                     "password2",  # Confirmation du mot de passe
+                    "compte_prive"
                 ),
             },
         ),
@@ -108,6 +110,7 @@ class UtilisateurAdmin(BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "compte_prive"
                     "groups",  # Groupes Django (hérité de PermissionsMixin)
                     "user_permissions",  # Permissions Django (hérité de PermissionsMixin)
                 ),
@@ -155,7 +158,7 @@ class AppareilAdmin(admin.ModelAdmin):
 
     # Barre de recherche en haut
     search_fields = [
-        "utilisateur__email"
+        "utilisateur__nom_utilisateur"
     ]
 
     # Champs affichés en lecture seule (non modifiables)

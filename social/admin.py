@@ -32,7 +32,7 @@ class CommentaireAdmin(admin.ModelAdmin):
     # Barre de recherche en haut
     search_fields = [
         "texte",
-        "commentateur__email",
+        "commentateur__nom_utilisateur",
     ]
 
     # Tri par défaut (du plus récent au plus ancien)
@@ -105,7 +105,7 @@ class LikeAdmin(admin.ModelAdmin):
 
     # Barre de recherche en haut
     search_fields = [
-        "auteur__email",
+        "randonnee__titre_randonnee",
     ]
 
     # Tri par défaut (du plus récent au plus ancien)

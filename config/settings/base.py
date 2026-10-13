@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'medias',
     'randonnees',
     'social',
+    'notifications',
+    'predictions',
+    
 ]
 
 MIDDLEWARE = [

@@ -94,6 +94,12 @@ class Randonnee(models.Model):
         verbose_name = "Randonnee"
         verbose_name_plural = "Randonnees"
         ordering = ["-date_publication_randonnee"]
+        indexes = [
+            models.Index(
+            fields=["date_publication_randonnee"],
+            name="idx_date_publication_randonnee"
+        )
+        ]
 
     def __str__(self):
         return self.titre_randonnee
@@ -128,6 +134,16 @@ class StatistiqueRandonnee(models.Model):
         help_text="Le nombre de commentaires sur la randonnée"
     )
 
+    nombre_medias = models.IntegerField(
+        default=0,
+        help_text="Le nombre de médias de la randonnée"
+    )
+
+    longueur_description_randonnee = models.IntegerField(
+        default=0,
+        help_text="La longueur du text descriptif de la randonnée"
+    )
+
     # --- Les métriques d'audience (Crucial pour l'IA) ---
     abonnes_auteur_a_la_publication = models.IntegerField(
         default=0,
@@ -150,11 +166,13 @@ class StatistiqueRandonnee(models.Model):
         help_text="Date de la dernière mise à jour des compteurs"
     )
 
+
     class Meta:
         db_table = "statistiques_randonnees"
         verbose_name = "Statistique Randonnée"
         verbose_name_plural = "Statistiques Randonnées"
         ordering = ["-date_derniere_mise_a_jour"]
+        
 
     def __str__(self) -> str:
         return f"Stats pour : {self.randonnee.titre_randonnee} ({self.nombre_vues} vues)"
