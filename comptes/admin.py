@@ -110,7 +110,7 @@ class UtilisateurAdmin(BaseUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
-                    "compte_prive"
+                    "compte_prive",
                     "groups",  # Groupes Django (hérité de PermissionsMixin)
                     "user_permissions",  # Permissions Django (hérité de PermissionsMixin)
                 ),
