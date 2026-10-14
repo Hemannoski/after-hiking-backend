@@ -62,7 +62,7 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
 
     # --- Champs d'identification et de profil ---
     firebase_uid = models.CharField(
-        max_length=128,
+        max_length=225,
         unique=True,
         help_text="Identifiant unique fourni par Firebase Auth."
     )
@@ -188,6 +188,10 @@ class Appareil(models.Model):
         verbose_name = "Appareil"
         verbose_name_plural = "Appareils"
         ordering = ["-date_connexion"]
+        constraints = [
+            models.UniqueConstraint(fields=["utilisateur", "jeton_notification_appareil"],
+            name="unique_jeton_par_utilisateur")
+        ]
 
     def __str__(self) -> str:
         return f"{self.type_appareil} - {self.utilisateur.email}"

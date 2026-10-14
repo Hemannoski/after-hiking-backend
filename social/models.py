@@ -1,7 +1,12 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
 
 class Commentaire(models.Model):
     """Ce modèle gères tous les commentaires des utilisateurs"""
+
+    randonnee_id: int
+    commentaire_parent_id: int | None
 
     randonnee = models.ForeignKey(
         'randonnees.Randonnee',
@@ -34,6 +39,42 @@ class Commentaire(models.Model):
         related_name='reponses',
         help_text="Le commentaire parent"
     )
+
+    masque = models.BooleanField(
+        default=False, 
+        help_text="Commentaire masqué par la modération"
+    )
+
+    
+
+     # --- VALIDATION DES RÈGLES MÉTIER ---
+    def clean(self):
+        """
+        Valide les règles métier :
+        1. La réponse doit appartenir à la même randonnée que son parent
+        2. Maximum 2 niveaux de réponses (commentaire → réponse → réponse à réponse)
+        """
+        super().clean()
+        parent = self.commentaire_parent
+        
+        if parent is None:
+            return
+
+        if self.pk and parent.pk == self.pk:
+            raise ValidationError({'commentaire_parent': "Un commentaire ne peut pas se répondre à lui-même."})
+        
+        # Règle 1 : Le parent doit être sur la même randonnée
+        if parent.randonnee_id != self.randonnee_id:
+            raise ValidationError({
+                'commentaire_parent': "La réponse doit appartenir à la même randonnée que son parent."
+            })
+        
+        # Règle 2 : Maximum 2 niveaux de profondeur
+        # Si le parent a lui-même un parent qui a un parent, on est au 3ème niveau → refusé
+        if parent.commentaire_parent and parent.commentaire_parent.commentaire_parent:
+            raise ValidationError({
+                'commentaire_parent': "Nombre maximal de niveaux de réponses atteint (2 niveaux max)."
+            })
 
 
     class Meta:
@@ -112,7 +153,9 @@ class Abonnement(models.Model):
         verbose_name_plural = "Abonnements"
         ordering = ["-date_abonnement"]
         constraints = [
-            models.UniqueConstraint(fields=['abonne', 'suivi'], name='unique_abonnement')
+            models.UniqueConstraint(fields=['abonne', 'suivi'], name='unique_abonnement'),
+            models.CheckConstraint(condition=~models.Q(abonne=models.F('suivi')),
+            name='abonnement_pas_soi_meme'),
         ]
 
     def __str__(self) -> str:
@@ -149,7 +192,9 @@ class Blocage(models.Model):
         verbose_name_plural = "Blocages"
         ordering = ["-date_compte_bloque"]
         constraints = [
-            models.UniqueConstraint(fields=['utilisateur_bloque', 'utilisateur'], name="unique_blocage")
+            models.UniqueConstraint(
+            fields=['utilisateur_bloque', 'utilisateur'], name="unique_blocage"),
+            models.CheckConstraint(condition=~models.Q(utilisateur=models.F('utilisateur_bloque')), name="blocage_pas_soi_meme"),
         ]
 
     def __str__(self) -> str:

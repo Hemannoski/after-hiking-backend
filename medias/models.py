@@ -17,8 +17,6 @@ class Media(models.Model):
     randonnee = models.ForeignKey(
         'randonnees.Randonnee',
         on_delete=models.CASCADE,
-        blank=True,
-        null=True,
         related_name='tous_mes_medias',
         help_text="La clé étrangère de la randonnée qui a été publiée"
     )
@@ -55,7 +53,6 @@ class Media(models.Model):
 
     status_traitement = models.CharField(
         max_length=20,
-        blank=True,
         choices=StatutTraitementDuMedia.choices,
         default=StatutTraitementDuMedia.EN_ATTENTE,
         help_text="Le status du traitement du media (uploade, compression, etc.)."

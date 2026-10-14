@@ -36,7 +36,7 @@ class Randonnee(models.Model):
     )
 
     lieu_randonnee = models.CharField(
-        max_length=50,
+        max_length=255,
         help_text="Le lieu où s'est tenu la randonnée."
     )
 
@@ -93,7 +93,7 @@ class Randonnee(models.Model):
         db_table = "randonnees"
         verbose_name = "Randonnee"
         verbose_name_plural = "Randonnees"
-        ordering = ["-date_publication_randonnee"]
+        ordering = [models.F("date_publication_randonnee").desc(nulls_last=True)]
         indexes = [
             models.Index(
             fields=["date_publication_randonnee"],
@@ -113,6 +113,7 @@ class StatistiqueRandonnee(models.Model):
 
     randonnee = models.OneToOneField(
         'Randonnee',
+        primary_key=True,
         on_delete=models.CASCADE,
         related_name='statistiques',
         help_text="La randonnée associée à ces statistiques"

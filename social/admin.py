@@ -20,6 +20,7 @@ class CommentaireAdmin(admin.ModelAdmin):
         "commentateur",
         "date_creation_commentaire",
         "commentaire_parent",
+        "masque"
     ]
 
 
