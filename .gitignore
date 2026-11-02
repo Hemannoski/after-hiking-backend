@@ -14,3 +14,7 @@ media/
 # Système
 .DS_Store
 Thumbs.db
+# La clé JSON
+secrets/
+#Le mécanisme de génération de token
+get_token.py

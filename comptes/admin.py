@@ -17,7 +17,7 @@ class UtilisateurAdmin(BaseUserAdmin):
     list_display = [
         "email",
         "nom_utilisateur",
-        "nom_affiche",
+        "nom_complet",
         "ville",
         "is_active",
         "is_staff",
@@ -40,7 +40,7 @@ class UtilisateurAdmin(BaseUserAdmin):
     search_fields = [
         "email",
         "nom_utilisateur",
-        "nom_affiche",
+        "nom_complet",
         "firebase_uid",
     ]
     
@@ -95,7 +95,7 @@ class UtilisateurAdmin(BaseUserAdmin):
             "Profil public",
             {
                 "fields": (
-                    "nom_affiche",
+                    "nom_complet",
                     "nom_utilisateur",
                     "bio",
                     "photo_profil",

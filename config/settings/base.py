@@ -20,15 +20,28 @@ depuis le fichier .env grâce à python-decouple.
 from pathlib import Path
 from decouple import config, Csv
 
+
 # BASE_DIR pointe vers le dossier backend/ (deux niveaux au-dessus de ce fichier,
 # car ce fichier est maintenant dans config/settings/, pas directement dans config/)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+# Firebase
+FIREBASE_CREDENTIALS_PATH = BASE_DIR / 'secrets' / 'firebase_service_account.json'
 
 
 # --- Sécurité ---
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=Csv())
+
+# --- Cloudinary (hébergement des images) ---
+CLOUDINARY_CLOUD_NAME = config('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = config('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = config('CLOUDINARY_API_SECRET')
+
+# --- Règles de la photo de profil ---
+PHOTO_PROFIL_TAILLE_MAX = 5 * 1024 * 1024  # 5 Mo, en octets
+PHOTO_PROFIL_TYPES_ACCEPTES = ('image/jpeg', 'image/png', 'image/webp', 'image/jpg')
+PHOTO_PROFIL_DOSSIER = 'after_hiking/photos_profil'
 
 
 # --- Applications installées ---
@@ -44,6 +57,8 @@ INSTALLED_APPS = [
     # Bibliothèques tierces
     'rest_framework',
     'drf_spectacular',
+    'cloudinary',
+    'django_filters',
     'medias',
     'randonnees',
     'social',
@@ -118,14 +133,6 @@ STATIC_URL = 'static/'
 # --- Clé primaire par défaut pour les nouveaux modèles ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# --- Django REST Framework ---
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
-}
-
 SPECTACULAR_SETTINGS = {
     'TITLE': 'After Hiking API',
     'DESCRIPTION': "API de l'application After Hiking — partage de randonnées en Côte d'Ivoire",
@@ -145,3 +152,25 @@ MAILERS = {
 
 # --- Modèle utilisateur personnalisé ---
 AUTH_USER_MODEL = 'comptes.Utilisateur'
+
+
+# --- Configuration de Django REST Framework ---
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'comptes.authentication.FirebaseAuthentication', 
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ] + (['rest_framework.renderers.BrowsableAPIRenderer'] if DEBUG else []),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+}

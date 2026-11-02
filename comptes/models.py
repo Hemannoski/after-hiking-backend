@@ -70,9 +70,7 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         unique=True,
         help_text="Adresse email obligatoire (utilisée pour la connexion Firebase)."
     )
-    nom_affiche = models.CharField(
-        blank=True,
-        default="",
+    nom_complet = models.CharField(
         max_length=100,
         help_text="Nom affiché publiquement (ex: Awa Koné)."
     )

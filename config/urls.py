@@ -22,6 +22,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include('comptes.urls')),
 ]
 
 # Ajouter les URLs du Debug Toolbar UNIQUEMENT en développement
@@ -30,3 +31,5 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+
+

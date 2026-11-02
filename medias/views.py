@@ -1,3 +1,9 @@
-from django.shortcuts import render
+# from django.shortcuts import render
+# from rest_framework.views import APIView
+# from rest_framework.permissions import AllowAny
 
-# Create your views here.
+
+
+# class MuxWebhookView(APIView):             # POST /webhooks/mux
+#     authentication_classes = []
+#     permission_classes = [AllowAny]        # protégée par la signature Mux, pas par Firebase
